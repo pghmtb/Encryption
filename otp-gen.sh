@@ -16,10 +16,8 @@ rowcount=10
 jd=`date +"%j"`
 otpath="./otp-$fname-$jd.txt"
 echo "output path: " $otpath
-if test -f "$otpath"; then
-    echo rm $otpath
-fi
 
+rm $otpath
 echo "" >> $otpath
 echo "" >> $otpath
 
