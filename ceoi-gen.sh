@@ -1,7 +1,6 @@
 #!/bin/bash
 
 read -p 'Filename seed (ex: unit1) : ' fname
-read -p 'Number of codes: ' otppagecount
 
 
 echo ""
@@ -333,73 +332,6 @@ full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "Z " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
 
 
-
-#----------------------------------------
-# One Time Pad generator
-#----------------------------------------
-echo "Generating OTP - please wait..."
-blocksize=5
-blockrow=5
-rowcount=10
-#pagecount=3
-
-otpath='./otp.txt'
-#bookserial=`sudo base64 /dev/hwrng | tr -dc '0-9'| head -c 5`
-
-if [ -f "$otpath" ]; then
-    rm $otpath
-fi
-echo "One time Pad" >> $otpath
-echo "Example.  Use the Conversion table to get the plain code then subtract the OTP key:" >> $otpath
-echo "If the top number is less than the OTP key number, you just add 10 to the top number" >> $otpath
-echo "" >> $otpath
-echo "M  E E T I N G     A T    1   4      P  M     I N    N Y  (.)" >> $otpath
-echo "79 2 2 6 3 4 74 99 1 6 90 111 444 90 80 79 99 3 4 99 4 88 91" >> $otpath
-echo "Plaincode : KEYID 79226 34749 91690 11144 49080 79993 49948 89191" >> $otpath
-echo "OTP Key(-): 68496 47757 10126 36660 25066 07418 79781 48209 28600" >> $otpath
-echo "-----------------------------------------------------" >> $otpath
-echo "Ciphertext: 68496 32579 24623 65030 96188 42672 00212 01749 61591" >> $otpath
-echo "" >> $otpath
-echo "Numbers are written between 90, before and after and the individual numbers" >> $otpath
-echo "are repeated 3 Times." >> $otpath
-echo "" >> $otpath
-echo "To decode you just add the Ciphertext to the OTP Key(+)." >> $otpath
-echo "If the result is greater than 10, just subtract 10." >> $otpath
-echo "" >> $otpath;
-
-for ((x=1; x<=$otppagecount; x++))
-do  
-  bookserial=`sudo base64 /dev/hwrng | tr -dc '0-9'| head -c 5`
-  echo -n $bookserial >> $otpath;
-  printf '%22s' $x"/"$otppagecount >> $otpath;
-  printf '%22s' $x"/"$otppagecount
-  echo "" >> $otpath;
-  for ((i=1; i<=$rowcount; i++))
-  do
-    for ((j=1; j<=$blockrow; j++))
-    do
-        randnum=`sudo base64 /dev/hwrng | tr -dc '0-9'| head -c $blocksize`
-        echo -n $randnum >> $otpath;
-        echo -n "  " >> $otpath;
-    done
-      echo "" >> $otpath;
-  done
-  echo "--------------------------------" >> $otpath
-done
-echo "" >> $otpath;
-echo "Conversion Table No.1 (EN)">> $otpath
-echo "     B-70  P-80  FIG-90">> $otpath
-echo "A-1  C-71  Q-81  (.)-91">> $otpath
-echo "E-2  D-72  R-82  (:)-92">> $otpath
-echo "I-3  F-73  S-83  (')-93">> $otpath
-echo "N-4  G-74  U-84  ( )-94">> $otpath
-echo "O-5  H-75  V-85  (+)-95">> $otpath
-echo "T-6  J-76  W-86  (-)-96">> $otpath
-echo "     K-77  X-87  (=)-97">> $otpath
-echo "     L-78  Y-88  REQ-88">> $otpath
-echo "     M-79  Z-89  SPC-99">> $otpath
-echo "Code-0     -E   +D">> $otpath
-
 echo ""
 #-----------------------------------
 #-----------------------------------
@@ -451,15 +383,13 @@ echo"" >> $otpath
 cat ./auth.txt >> $otpath
 echo "" >> $otpath
 echo "----------------------------------------" >> $otpath
-echo"" >> $otpath
-cat ./otp.txt >> $otpath
+echo "" >>$otpath
 echo ""
 echo "Cleaning up"
 rm ./freq.txt
 rm ./callsign.txt
 rm ./pass.txt
 rm ./auth.txt
-rm ./otp.txt
 echo ""
 echo "finished"
 
