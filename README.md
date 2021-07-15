@@ -1,4 +1,14 @@
-# Encryption
+# SIGINT - SIGNAL Intelligence
+
+This repository has a few files to help with your SIGINT
+
+ceoi-gen.sh - CEOI is Communications-Electronic Operating Instructions
+This script generates an automated communications plan with daily passwords, callsigns an authentication tables.
+
+code-gen.sh - This script generates a code table for use with encryption.
+
+otp-gen.sh - This script generate One Time Pads
+ 
 https://amrron.com/2015/06/01/one-time-pads-unbreakable-encryption-an-old-school-tool/
 
 Example.  Use the Conversion table to get the plain code then subtract the OTP key:
