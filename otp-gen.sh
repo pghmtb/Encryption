@@ -46,7 +46,7 @@ do
 
         echo -n $randnum >> $otpath;
 
-        echo -n "  " >> $otpath;
+        echo -n " " >> $otpath;
 
     done 
 
@@ -54,7 +54,6 @@ do
   done
   echo "" >> $otpath;
   printf '%22s' "(e-d+t/k)" >> $otpath
-  echo "" >> $otpath
   echo "" >> $otpath
   echo "--------------------------------" >> $otpath
   echo "" >> $otpath
@@ -81,7 +80,7 @@ echo "T-6  J-76  W-86  (-)-96">> $otpath
 
 echo "     K-77  X-87  (=)-97">> $otpath
 
-echo "     L-78  Y-88  REQ-88">> $otpath
+echo "     L-78  Y-88  REQ-98">> $otpath
 
 echo "     M-79  Z-89  SPC-99">> $otpath
 
