@@ -4,7 +4,9 @@ read -p 'Filename seed (ex: unit1) : ' fname
 
 
 echo ""
-echo "Generating CEOI Communication Electronics Operarating Instructions"
+echo "Generating CEOI Communication"
+echo " Electronics Operarating"
+echo " Instructions"
 echo ""
 
 #----------------------------------------
@@ -14,14 +16,15 @@ echo ""
 echo "Generating Frequencies"
 
 jd=`date +"%j"`
-dmode="MFSK-32 ctr 1500"
+dmode="cont-4/250 ctr 1500"
 otpath='./freq.txt'
 if [ -f "$otpath" ]; then
     rm $otpath
 fi
 
-echo "Frequencies      " $jd >> $otpath
-echo "If frequency is in use move up in 3kHz steps" >> $otpath
+echo "Frequencies      " >> $otpath
+echo "If frequency is in use move up" >> $otpath
+echo " in 3kHz steps" >> $otpath
 #2 Meters
 check2m () {
 mhz=`shuf -i 146-147 -n 1`
@@ -111,15 +114,15 @@ if [ -f "$otpath" ] ; then
 fi
 
   echo "Callsign Table" >> $otpath;
-echo "Generating Callsigns - please wait..."
-echo "Numbers indicate last digit of day" >> $otpath
+echo "Generating Callsigns.."
+echo "# indicates last digit of day" >> $otpath
 echo "ex: 2 covers 2, 12, 22" >> $otpath
 echo "" >> $otpath
 
 units=("Alpha" "Bravo" "Charlie" "Delta" "Echo")
 count=${#units[@]}
 
-  echo "             0    1    2    3    4    5    6    7    8    9" >> $otpath;
+#  echo "             0    1    2    3    4    5    6    7    8    9" >> $otpath;
   echo "" >> $otpath;
 chargen () {
         randnum1=`base64 /dev/random | tr -d '+/\r\n0-9a-z' | head -c $blocksize`
@@ -136,25 +139,30 @@ chargen () {
 for ((i=0; i<$count; i++))
 do
 chargen
-  printf %10s "${units[i]} :" >> $otpath;      
-       echo -n " " $randnum1 >> $otpath;
-       echo -n " " $randnum2 >> $otpath;
-       echo -n " " $randnum3 >> $otpath;
-       echo -n " " $randnum4 >> $otpath;
-       echo -n " " $randnum5 >> $otpath;
-       echo -n " " $randnum6 >> $otpath;
-       echo -n " " $randnum7 >> $otpath;
-       echo -n " " $randnum8 >> $otpath;
-       echo -n " " $randnum9 >> $otpath;
-       echo -n " " $randnum0 >> $otpath;
-      echo "" >> $otpath;
+echo ${units[i]}" :" >> $otpath;
+echo " 0   1   2   3   4   5" >> $otpath
+#  printf %10s "${units[i]} :" >> $otpath;      
+       echo -n $randnum1" " >> $otpath;
+       echo -n $randnum2" " >> $otpath;
+       echo -n $randnum3 " ">> $otpath;
+       echo -n $randnum4" " >> $otpath;
+       echo -n $randnum5" " >> $otpath;
+       echo " " >>$otpath
+       echo " 6   7   8   9" >> $otpath
+       echo -n $randnum6" " >> $otpath;
+       echo -n $randnum7" " >> $otpath;
+       echo -n $randnum8" " >> $otpath;
+       echo -n $randnum9" " >> $otpath;
+       echo -n $randnum0" " >> $otpath;
+       echo "" >> $otpath
+       echo "-----------------------------" >> $otpath;
 done
 
 
 #----------------------------------------
 # Password generator
 #----------------------------------------
-echo "Generating Passwords - please wait..."
+echo "Generating Passwords"
 blocksize=13
 rowcount=9
 otpath='./pass.txt'
@@ -164,7 +172,7 @@ if [ -f "$otpath" ]; then
     rm $otpath
 fi
 echo "Passwords" >> $otpath
-echo "Numbers indicate last digit of day" >> $otpath
+echo "#'s indicate last digit of day" >> $otpath
 echo "ex: 2 covers 2, 12, 22" >> $otpath
 
   echo "" >> $otpath;
@@ -179,160 +187,60 @@ done
 
 
 #----------------------------------------
-# Authentication Table generator
+# 10 letter Authentication 
 #----------------------------------------
-echo "Generating Authentication - please wait..."
+echo "Generating Authentication"
 jd=`date +"%j"`
 otpath='./auth.txt'
 if [ -f "$otpath" ]; then
     rm $otpath
 fi
 
-echo "Authentication Table          " >> $otpath;
+echo "Authentication List" >> $otpath;
 echo "" >> $otpath
-echo "The alphabet is listed in a column on the left." >> $otpath
-echo "Across the top are the numbers 0-9, and the alphabet," >> $otpath
-echo "split into groups of 2-4 letters." >> $otpath
-echo "To authenticate, the person requesting authentication" >> $otpath
-echo "picks a letter in the left hand column, and then" >> $otpath
-echo "picks a random letter from the alphabet (which will be in the row.)" >> $otpath
-echo "The responder will find the corresponding letter on their " >> $otpath
-echo "copy of the table, and respond with the letter below the one chosen." >> $otpath
-echo "For example:" >> $otpath
-echo "Bravo One, This is Bravo Six... Authenticate Delta Victor, Over" >> $otpath
-echo "We go down to row “D”, and then go across to the letter V." >> $otpath
-echo "We check that the letter immediately under is the letter K" >> $otpath
-echo "so Bravo One would respond Bravo Six, This is Bravo One... I Authenticate Kilo, Over." >> $otpath
-echo "It is important that both parties mark authenticators once they have been used," >> $otpath
-echo "so they are not re-used." >> $otpath
-echo "" >> $otpath;
-echo "Authentication Table          " $jd >> $otpath;
-echo "" >> $otpath;
-echo "   ABC  DEF GHJ KL MN PQR ST UV WX YZ" >> $otpath;
-echo "    0    1   2  3  4   5  6  7  8  9" >> $otpath;
-echo "" >> $otpath;
-
-alph="BCDEFGHIJKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "A " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ACDEFGHIJKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "B " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABDEFGHIJKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "C " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCEFGHIJKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "D " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDFGHIJKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "E " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEGHIJKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "F " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-echo "" >> $otpath;
-echo "   ABC  DEF GHJ KL MN PQR ST UV WX YZ" >> $otpath;
-echo "    0    1   2  3  4   5  6  7  8  9" >> $otpath;
-echo "" >> $otpath;
-
-alph="ABCDEFHIJKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "G " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGIJKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "H " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHJKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "I " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIKLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "J " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJLMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "K " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKMNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "L " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-echo "" >> $otpath;
-echo "   ABC  DEF GHJ KL MN PQR ST UV WX YZ" >> $otpath;
-echo "    0    1   2  3  4   5  6  7  8  9" >> $otpath;
-echo "" >> $otpath;
-
-alph="ABCDEFGHIJKLNOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "M " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMOPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "N " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNPQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "O " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOQRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "P " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPRSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "Q " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPQSTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "R " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-echo "" >> $otpath;
-echo "   ABC  DEF GHJ KL MN PQR ST UV WX YZ" >> $otpath;
-echo "    0    1   2  3  4   5  6  7  8  9" >> $otpath;
-echo "" >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPQRTUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "S " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPQRSUVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "T " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPQRSTVWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "U " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPQRSTUWXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "V " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPQRSTUVXYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "W " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPQRSTUVWYZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "X " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPQRSTUVWXZ"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "Y " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-alph="ABCDEFGHIJKLMNOPQRSTUVWXY"
-full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
-echo "Z " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
-
-
+echo "The authentication word is a " >> $otpath
+echo "ten-letter word, with no" >> $otpath
+echo "duplicate letters. Each letter" >> $otpath
+echo "has a corresponding number as" >> $otpath
+echo "its value." >> $otpath
 echo ""
+word=`shuf -n 1 10-letter-word.file`
+totalcode=${#word}
+i=0
+echo " " >> $otpath
+echo "1 2 3 4 5 6 7 8 9 0" >> $otpath
+while [ $i -lt $totalcode ]
+do
+code1=${word:$i:1}
+echo -n $code1" " >> $otpath;
+
+((i++))
+done
+echo " " >> $otpath
+echo " " >> $otpath
+
+echo "HOW TO USE IT" >> $otpath
+echo " " >> $otpath
+echo "If the station you are in" >> $otpath
+echo "contact with is responding" >> $otpath
+echo "appropriately to your" >> $otpath
+echo "challenge, he is either an" >> $otpath
+echo "friend Operator, or a " >> $otpath
+echo "really sophisticated bad" >> $otpath
+echo "guy. There are many ways" >> $otpath
+echo "this can be used to" >> $otpath
+echo "authenticate that someone has" >> $otpath
+echo "has the same SOI as you" >> $otpath
+echo "(which is what this does)." >> $otpath
+echo "1. Ask for a sum. What is " >> $otpath
+echo "   the sum of ‘Mike’ and" >> $otpath
+echo "   ‘Charlie’?" >> $otpath
+echo " " >> $otpath
+echo "Answer: Ten (or One Zero)" >> $otpath
+echo "2. Expedient method. What is" >> $otpath
+echo "   the fourth letter of the" >> $otpath
+echo "   [authentication] word?" >> $otpath
+echo "Answer: Hotel" >> $otpath
 #-----------------------------------
 #-----------------------------------
 #Gen file
@@ -351,38 +259,24 @@ echo "" >> $otpath
 echo "CEOI-$fname-$jd" >> $otpath
 echo "" >> $otpath
 #-----------------------------------
-# PACE
-#----------------------------------
-echo "----------------------------------------" >> $otpath
-echo "P.A.C.E for Comms" >> $otpath
-echo "Primary 	Email" >> $otpath
-echo "Alternate	txt" >> $otpath
-echo "Contingency	Radio" >> $otpath
-echo "Emergency 	Person to person or hard drop" >> $otpath
-echo "" >> $otpath
-echo "P.A.C.E for Encryption" >> $otpath
-echo "Primary		PTE/SSE		Multi platform java based https://paranoiaworks.mobi/" >> $otpath
-echo "Alternate	OTP		One Time Pad" >> $otpath
-echo "Contingency	Codebook	Codebook to obscure message" >> $otpath
-echo "Emergency	Auth table	Can be use to encode message" >> $otpath
-echo "" >> $otpath
-echo "----------------------------------------" >> $otpath
+
+echo "------------------------------" >> $otpath
 echo"" >> $otpath
 cat ./freq.txt >> $otpath
 echo "" >> $otpath
-echo "----------------------------------------" >> $otpath
+echo "------------------------------" >> $otpath
 echo"" >> $otpath
 cat ./callsign.txt >> $otpath
 echo "" >> $otpath
-echo "----------------------------------------" >> $otpath
+echo "------------------------------" >> $otpath
 echo"" >> $otpath
 cat ./pass.txt >> $otpath
 echo "" >> $otpath
-echo "----------------------------------------" >> $otpath
+echo "------------------------------" >> $otpath
 echo"" >> $otpath
 cat ./auth.txt >> $otpath
 echo "" >> $otpath
-echo "----------------------------------------" >> $otpath
+echo "------------------------------" >> $otpath
 echo "" >>$otpath
 echo ""
 echo "Cleaning up"
