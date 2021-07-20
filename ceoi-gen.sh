@@ -196,7 +196,7 @@ if [ -f "$otpath" ]; then
     rm $otpath
 fi
 
-echo "Authentication List" >> $otpath;
+echo "Authentication Word" >> $otpath;
 echo "" >> $otpath
 echo "The authentication word is a " >> $otpath
 echo "ten-letter word, with no" >> $otpath
@@ -221,26 +221,14 @@ echo " " >> $otpath
 
 echo "HOW TO USE IT" >> $otpath
 echo " " >> $otpath
-echo "If the station you are in" >> $otpath
-echo "contact with is responding" >> $otpath
-echo "appropriately to your" >> $otpath
-echo "challenge, he is either an" >> $otpath
-echo "friend Operator, or a " >> $otpath
-echo "really sophisticated bad" >> $otpath
-echo "guy. There are many ways" >> $otpath
-echo "this can be used to" >> $otpath
-echo "authenticate that someone has" >> $otpath
-echo "has the same SOI as you" >> $otpath
-echo "(which is what this does)." >> $otpath
 echo "1. Ask for a sum. What is " >> $otpath
-echo "   the sum of ‘Mike’ and" >> $otpath
-echo "   ‘Charlie’?" >> $otpath
+echo "   the sum of two of the"" >> $otpath
+echo "   letters." >> $otpath
 echo " " >> $otpath
-echo "Answer: Ten (or One Zero)" >> $otpath
 echo "2. Expedient method. What is" >> $otpath
 echo "   the fourth letter of the" >> $otpath
 echo "   [authentication] word?" >> $otpath
-echo "Answer: Hotel" >> $otpath
+echo " " >> $otpath
 #-----------------------------------
 #-----------------------------------
 #Gen file
