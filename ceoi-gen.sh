@@ -17,7 +17,7 @@ echo "Generating Frequencies"
 
 jd=`date +"%j"`
 dmode="cont-4/250 ctr 1500"
-otpath='./freq.txt'
+otpath='./freq.tmp'
 if [ -f "$otpath" ]; then
     rm $otpath
 fi
@@ -106,7 +106,7 @@ blocksize=3
 blockrow=1
 rowcount=9
 pagecount=1
-otpath='./callsign.txt'
+otpath='./callsign.tmp'
 
 
 if [ -f "$otpath" ] ; then
@@ -165,7 +165,7 @@ done
 echo "Generating Passwords"
 blocksize=13
 rowcount=9
-otpath='./pass.txt'
+otpath='./pass.tmp'
 
 
 if [ -f "$otpath" ]; then
@@ -191,7 +191,7 @@ done
 #----------------------------------------
 echo "Generating Authentication"
 jd=`date +"%j"`
-otpath='./auth.txt'
+otpath='./auth.tmp'
 if [ -f "$otpath" ]; then
     rm $otpath
 fi
@@ -222,7 +222,7 @@ echo " " >> $otpath
 echo "HOW TO USE IT" >> $otpath
 echo " " >> $otpath
 echo "1. Ask for a sum. What is " >> $otpath
-echo "   the sum of two of the"" >> $otpath
+echo "   the sum of two of the" >> $otpath
 echo "   letters." >> $otpath
 echo " " >> $otpath
 echo "2. Expedient method. What is" >> $otpath
@@ -250,28 +250,28 @@ echo "" >> $otpath
 
 echo "------------------------------" >> $otpath
 echo"" >> $otpath
-cat ./freq.txt >> $otpath
+cat ./freq.tmp >> $otpath
 echo "" >> $otpath
 echo "------------------------------" >> $otpath
 echo"" >> $otpath
-cat ./callsign.txt >> $otpath
+cat ./callsign.tmp >> $otpath
 echo "" >> $otpath
 echo "------------------------------" >> $otpath
 echo"" >> $otpath
-cat ./pass.txt >> $otpath
+cat ./pass.tmp >> $otpath
 echo "" >> $otpath
 echo "------------------------------" >> $otpath
 echo"" >> $otpath
-cat ./auth.txt >> $otpath
+cat ./auth.tmp >> $otpath
 echo "" >> $otpath
 echo "------------------------------" >> $otpath
 echo "" >>$otpath
 echo ""
 echo "Cleaning up"
-rm ./freq.txt
-rm ./callsign.txt
-rm ./pass.txt
-rm ./auth.txt
+rm ./freq.tmp
+rm ./callsign.tmp
+rm ./pass.tmp
+rm ./auth.tmp
 echo ""
 echo "finished"
 
