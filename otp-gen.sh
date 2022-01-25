@@ -2,10 +2,8 @@
 
 # Script to generate one time pads
 
-
-if [ -z "$1" ]; then echo  "Usage: ./otp-gen.sh <filename> <nuber of pads to generate> "; exit; fi
-fname=$1
-pagecount=$2
+read -p 'Filename seed (ex: unit1) : ' fname
+read -p 'Number of pads: ' pagecount
 
 blocksize=5
 

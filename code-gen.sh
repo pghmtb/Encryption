@@ -1,7 +1,9 @@
 #!/bin/bash
 
+read -p 'Filename seed (ex: unit1) : ' fname
+
 jd=`date +"%j"`
-fname=`base64 /dev/random | tr -dc a-z0-9 | head -c 6`
+
 otpath="./codebook-$fname-$jd.txt"
 if [ -f "$otpath" ]; then
     rm $otpath
@@ -22,8 +24,8 @@ words=(
  "Armed Men Qty"
  "Attack"
  "Barn or Shed"
- "Bearing Magnetic compass bearing"
- "Bearing true compass bearing"
+ "Magnetic compass bearing"
+ "True compass bearing"
  "Boat or Ship Qty"
  "Border"
  "Building"
@@ -62,7 +64,7 @@ words=(
  "Livestock"
  "Location"
  "Medevac"
- "Message Readibility 1 to 5"
+ "Message Readibility 1-5"
  "Mountain"
  "Moving Away From"
  "Moving Towards"
@@ -82,7 +84,7 @@ words=(
  "River"
  "Road"
  "Sattellite Dish"
- "Signal Strength 1 to 9"
+ "Signal Strength 1-9"
  "Soldiers Qty"
  "South"
  "South East"
