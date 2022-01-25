@@ -53,7 +53,7 @@ do
   echo "" >> $otpath;
   printf '%22s' "(e-d+t/k)" >> $otpath
   echo "" >> $otpath
-  echo "--------------------------------" >> $otpath
+  echo "------------------------------" >> $otpath
   echo "" >> $otpath
 
 done
