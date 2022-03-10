@@ -1,7 +1,7 @@
 otpath="conv-table.txt"
 
 echo "" > $otpath
-  echo "-----------------------------" >> $otpath
+  echo "--------------------------" >> $otpath
   echo "" >> $otpath
 
 
