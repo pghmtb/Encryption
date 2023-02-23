@@ -1,7 +1,7 @@
 #!/bin/bash
 
 read -p 'Filename seed (ex: unit1) : ' fname
-read -p 'Number of pads: ' otpcount
+read -p 'Number of pads (recommend multiple of 3): ' otpcount
 
 echo ""
 echo "Generating CEOI Communication Electronics Operarating Instructions"
@@ -161,7 +161,8 @@ echo " 0   1   2   3   4   5" >> $otpath
        echo "" >> $otpath
 
 done
-
+echo " " >> $otpath
+echo " " >> $otpath
 
 #----------------------------------------
 # Password generator
@@ -246,23 +247,20 @@ echo "-------------------" >> $otpath
 echo "-------------------" >> $otpath
 echo " " >> $otpath
 
-echo "Dryad Authentication Table          " >> $otpath;
 echo "" >> $otpath
-echo "The alphabet is listed in a column on the left." >> $otpath
-echo "Across the top are the numbers 0-9, and the alphabet," >> $otpath
-echo "split into groups of 2-4 letters." >> $otpath
-echo "To authenticate, the person requesting authentication" >> $otpath
-echo "picks a letter in the left hand column, and then" >> $otpath
-echo "picks a random letter from the alphabet (which will be in the row.)" >> $otpath
-echo "The responder will find the corresponding letter on their " >> $otpath
-echo "copy of the table, and respond with the letter below the one chosen." >> $otpath
-echo "For example:" >> $otpath
-echo "Bravo One, This is Bravo Six... Authenticate Delta Victor, Over" >> $otpath
-echo "We go down to row “D”, and then go across to the letter V." >> $otpath
-echo "We check that the letter immediately under is the letter K" >> $otpath
-echo "so Bravo One would respond Bravo Six, This is Bravo One... I Authenticate Kilo, Over." >> $otpath
-echo "It is important that both parties mark authenticators once they have been used," >> $otpath
-echo "so they are not re-used." >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
+echo "" >> $otpath
 echo "" >> $otpath;
 echo "Dryad Authentication Table          " $jd >> $otpath;
 echo "" >> $otpath;
@@ -389,6 +387,21 @@ alph="ABCDEFGHIJKLMNOPQRSTUVWXY"
 full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "Z " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
 echo "" >> $otpath
+echo "To authenticate, the person requesting authentication" >> $otpath
+echo "picks a letter in the left hand column, and then" >> $otpath
+echo "picks a random letter from the alphabet from that row." >> $otpath
+echo "The response would be the letter below the one chosen." >> $otpath
+echo "For example:" >> $otpath
+echo "Bravo One, This is Bravo Six.. Authenticate Delta Victor, Over" >> $otpath
+echo "That would be row D, and then go across to the letter V." >> $otpath
+echo "The letter immediately under V is the correct response" >> $otpath
+echo "Bravo Six, This is Bravo One...I Authenticate Kilo, Over." >> $otpath
+echo "It is important that both parties mark authenticators once" >> $otpath
+echo "they have been used, so they are not re-used." >> $otpath
+echo "" >> $otpath;
+
+echo "" >> $otpath
+
 
 #--------------------------------------------
 # Script to generate one time pads
@@ -398,15 +411,12 @@ blocksize=5
 
 blockrow=5
 
-rowcount=12
+rowcount=14
 
 codeline=1
 
 echo " " >> $otpath
-echo "-------------------" >> $otpath
-echo "-------------------" >> $otpath
 echo " " >> $otpath
-echo "One Time Pads" >> $otpath
 echo " " >> $otpath
 echo " "
 echo " "
@@ -459,7 +469,6 @@ codeline=1
   echo "" >> $otpath
   echo "------------------------------" >> $otpath
   echo "" >> $otpath
-
 done
 
 echo " "
