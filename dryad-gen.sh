@@ -15,19 +15,11 @@ echo "Generating Dryad Authentication - please wait..."
 
 echo "Dryad Authentication Table          " >> $otpath;
 echo "" >> $otpath
-echo "The alphabet is listed in a column on the left." >> $otpath
-echo "Across the top are the numbers 0-9, and the alphabet," >> $otpath
-echo "split into groups of 2-4 letters." >> $otpath
 echo "To authenticate, the person requesting authentication" >> $otpath
 echo "picks a letter in the left hand column, and then" >> $otpath
 echo "picks a random letter from the alphabet (which will be in the row.)" >> $otpath
 echo "The responder will find the corresponding letter on their " >> $otpath
 echo "copy of the table, and respond with the letter below the one chosen." >> $otpath
-echo "For example:" >> $otpath
-echo "Bravo One, This is Bravo Six... Authenticate Delta Victor, Over" >> $otpath
-echo "We go down to row “D”, and then go across to the letter V." >> $otpath
-echo "We check that the letter immediately under is the letter K" >> $otpath
-echo "so Bravo One would respond Bravo Six, This is Bravo One... I Authenticate Kilo, Over." >> $otpath
 echo "It is important that both parties mark authenticators once they have been used," >> $otpath
 echo "so they are not re-used." >> $otpath
 echo "" >> $otpath;
