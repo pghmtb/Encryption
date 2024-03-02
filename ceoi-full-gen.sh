@@ -7,7 +7,7 @@ echo ""
 echo "Generating CEOI Communication Electronics Operarating Instructions"
 
 jd=`date +"%j"`
-dmode="cont-4/250 ctr 1500"
+dmode="digital"
 otpath="./ceoi-$fname-$jd.txt"
 echo "output path: " $otpath
 
