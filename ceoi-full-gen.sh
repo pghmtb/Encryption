@@ -44,6 +44,64 @@ echo "Enemy actively engaging. Risk of detection is high." >> $otpath
 echo " " >> $otpath
 echo "-------------------" >> $otpath
 echo " " >> $otpath
+
+#---------------------------------------
+#Time code
+#---------------------------------------
+echo "Generating Communicaations Windows"
+# Function to generate a random 10-minute window within a specific range in UTC format
+generate_random_window_in_range() {
+    local start_hour=$1
+    local start_minute=$2
+    local end_hour=$3
+    local end_minute=$4
+
+    # Calculate the total minutes from the start of the day for the start and end times
+    start_total_minutes=$((start_hour * 60 + start_minute))
+    end_total_minutes=$((end_hour * 60 + end_minute))
+
+    if [ $end_total_minutes -gt $start_total_minutes ]; then
+        # If the end time is later in the same day
+        total_minutes_range=$((end_total_minutes - start_total_minutes))
+    else
+        # If the end time is on the next day
+        total_minutes_range=$((end_total_minutes + 1440 - start_total_minutes))
+    fi
+
+    # Adjust range to account for 10-minute window
+    total_minutes_range=$((total_minutes_range - 10))
+
+    # Pick a random minute offset within the adjusted range
+    random_offset=$((RANDOM % total_minutes_range))
+    total_minutes=$((start_total_minutes + random_offset))
+
+    # Calculate the start and end times of the 10-minute window
+    start_hour=$((total_minutes / 60 % 24))
+    start_minute=$((total_minutes % 60))
+    end_hour=$(((total_minutes + 10) / 60 % 24))
+    end_minute=$(((total_minutes + 10) % 60))
+
+    # Format and return the window in UTC format
+    start_time=$(printf "%02d:%02dZ" $start_hour $start_minute)
+    end_time=$(printf "%02d:%02dZ" $end_hour $end_minute)
+    echo "$start_time - $end_time"
+}
+
+# Generate a random 10-minute window in the first range (10:30-13:30 UTC)
+random_window1=$(generate_random_window_in_range 10 30 13 30)
+
+# Generate a random 10-minute window in the second range (21:30-01:30 UTC)
+random_window2=$(generate_random_window_in_range 21 30 1 30)
+
+# Output the results
+echo "Communication windows" >> $otpath
+echo "$random_window1" >> $otpath
+echo "$random_window2" >> $otpath
+echo " " >> $otpath
+echo "-------------------" >> $otpath
+echo " " >> $otpath
+
+
 #----------------------------------------
 # Frequency generator
 #----------------------------------------
@@ -52,7 +110,7 @@ echo "Generating Frequencies"
 
 echo "Frequencies      " >> $otpath
 echo "If frequency is in use move up" >> $otpath
-echo " in 3kHz steps" >> $otpath
+echo "in 5kHz steps" >> $otpath
 #2 Meters
 check2m () {
 mhz=`shuf -i 146-147 -n 1`
@@ -66,13 +124,13 @@ done
 echo "$mhz.$freq FM" >> $otpath
 
 echo "" >> $otpath
-echo "Digital frequencies" >> $otpath
+echo "Alternate Digital frequencies" >> $otpath
 echo "-------------------" >> $otpath
 
 #20 Meters Digital
 mhz="14"
 freq=`shuf -i 025-147 -n 1`
-if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode" >> $otpath
+if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode - Daylight hours" >> $otpath
 else echo "$mhz.$freq USB $dmode - Daylight hours" >> $otpath
 fi
 
@@ -186,6 +244,7 @@ echo "-------------------" >> $otpath
 echo " " >> $otpath
 
 echo "Passwords" >> $otpath
+echo "Use to secure files/drives" >> $otpath
 echo "#'s indicate last digit of day" >> $otpath
 echo "ex: 2 covers 2, 12, 22" >> $otpath
 
@@ -198,50 +257,6 @@ for ((i=0; i<=$rowcount; i++))
 
 echo $i "   "  $randnum1 >> $otpath;
 done
-
-
-#----------------------------------------
-# 10 letter Authentication 
-#----------------------------------------
-echo " "
-echo "Generating Word Authentication"
-echo " " >> $otpath
-echo "-------------------" >> $otpath
-echo " " >> $otpath
-echo "Authentication Word" >> $otpath;
-echo "" >> $otpath
-echo "The authentication word is a " >> $otpath
-echo "ten-letter word, with no" >> $otpath
-echo "duplicate letters. Each letter" >> $otpath
-echo "has a corresponding number as" >> $otpath
-echo "its value." >> $otpath
-word=`shuf -n 1 10-letter-word.file`
-totalcode=${#word}
-i=0
-echo " " >> $otpath
-echo "1 2 3 4 5 6 7 8 9 0" >> $otpath
-while [ $i -lt $totalcode ]
-do
-code1=${word:$i:1}
-echo -n $code1" " >> $otpath;
-
-((i++))
-done
-echo " " >> $otpath
-echo " " >> $otpath
-
-echo "HOW TO USE IT" >> $otpath
-echo " " >> $otpath
-echo "1. Ask for a sum. What is " >> $otpath
-echo "   the sum of two of the" >> $otpath
-echo "   letters." >> $otpath
-echo " " >> $otpath
-echo "2. Expedient method. What is" >> $otpath
-echo "   the fourth letter of the" >> $otpath
-echo "   [authentication] word?" >> $otpath
-echo " " >> $otpath
-
-#-----------------------------------
 
 #----------------------------------------
 # Authentication Table generator
@@ -373,15 +388,6 @@ echo "" >> $otpath;
 #--------------------------------------------
 # Script to generate one time pads
 #--------------------------------------------
-
-blocksize=5
-
-blockrow=5
-
-rowcount=14
-
-codeline=1
-
 echo " " >> $otpath
 echo "-------------------" >> $otpath
 echo " " >> $otpath
@@ -393,50 +399,27 @@ echo "Generating One Time Pads "
 for ((x=1; x<=$otpcount; x++))
 
 do  
-  echo " "
-  echo $x"/"$otpcount
 
-  for ((i=1; i<=$rowcount; i++))
+# Function to generate a random 5-digit group
+generate_random_group() {
+    printf "%05d\n" $((RANDOM % 100000))
+}
 
-  do
-
-    for ((j=1; j<=$blockrow; j++))
-
-    do
-        echo -n "."
-        randnum=`sudo base64 /dev/hwrng | tr -dc '0-9'| head -c $blocksize`
-       if  [ $i == 1 ] && [ $j == 1 ]
-       then echo -n $randnum >> $otpath;
-       #printf '%22s' $x"/"$pagecount >> $otpath;
-       echo "" >> $otpath;
-       echo "" >> $otpath;
-       fi
-
-        echo -n $randnum >> $otpath;
-
-        echo -n " " >> $otpath;
-
+# Generate the one-time pad
+generate_one_time_pad() {
+    for ((row=0; row<5; row++)); do
+        for ((group=0; group<5; group++)); do
+            generate_random_group
+        done | paste -sd " " - >> $otpath
     done
+}
 
-if [ $codeline == 1 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 2 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 3 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 4 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 5 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 6 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 7 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 8 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 9 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 10 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 11 ]; then echo -n "" >> $otpath; fi
-if [ $codeline == 12 ]; then echo -n "" >> $otpath; fi
-      codeline=$((codeline+1))
-      echo "" >> $otpath
-  done
-codeline=1
-  echo "" >> $otpath
- 
-    done
+# Output the one-time pad
+
+generate_one_time_pad
+echo "" >> $otpath
+
+done
 
 echo "" >> $otpath
 echo "-------------------" >> $otpath
