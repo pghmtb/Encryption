@@ -377,7 +377,7 @@ alph="ABCDEFGHIJKLMNOPQRSTUVWXY"
 full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "Z " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
 echo "" >> $otpath
-echo "To request authenticatication" >> $otpath
+echo "To request authentication" >> $otpath
 echo "pick a letter in the left hand column" >> $otpath
 echo "pick another letter in that row." >> $otpath
 echo "The response is the letter below." >> $otpath
