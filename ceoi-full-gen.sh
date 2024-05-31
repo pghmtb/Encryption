@@ -1,7 +1,7 @@
 #!/bin/bash
 
 read -p 'Filename seed (ex: unit1) : ' fname
-read -p 'Number of pads (recommend multiple of 3): ' otpcount
+read -p 'Number of one time pads to generate: ' otpcount
 
 echo ""
 echo "Generating CEOI Communication Electronics Operarating Instructions"
