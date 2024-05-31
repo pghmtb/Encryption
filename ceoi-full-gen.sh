@@ -21,6 +21,29 @@ echo "CEOI" >> $otpath
 echo "-------------------" >> $otpath
 echo " " >> $otpath
 
+#----------------------------
+#Emmissions Control"
+#---------------------------
+
+echo "Emissions Contol (EmCon)" >> $otpath
+echo " " >> $otpath
+echo "EMCON 1: Radio Routine." >> $otpath
+echo "No perceived threat." >> $otpath
+echo " " >> $otpath
+echo "EMCON 2: Radio Essential." >> $otpath
+echo "Misson-critical/Emergency.  Heightened threat level." >> $otpath
+echo "Increased surveillance or potential hostilities." >> $otpath
+echo " " >> $otpath
+echo "EMCON 3: Radio Silence." >> $otpath
+echo "Text and burst data only.  Surveillance present," >> $otpath
+echo "Direction finding possible." >> $otpath
+echo " " >> $otpath
+echo "EMCON 4: Blackout." >> $otpath
+echo "Complete silence.  No emissions allowed." >> $otpath
+echo "Enemy actively engaging. Risk of detection is high." >> $otpath
+echo " " >> $otpath
+echo "-------------------" >> $otpath
+echo " " >> $otpath
 #----------------------------------------
 # Frequency generator
 #----------------------------------------
@@ -46,61 +69,48 @@ echo "" >> $otpath
 echo "Digital frequencies" >> $otpath
 echo "-------------------" >> $otpath
 
-#10 Meters digital
-mhz="28"
-freq=`shuf -i 000-297 -n 1`
-if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode" >> $otpath
-else echo "$mhz.$freq USB $dmode" >> $otpath
-fi
-
 #20 Meters Digital
 mhz="14"
 freq=`shuf -i 025-147 -n 1`
 if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode" >> $otpath
-else echo "$mhz.$freq USB $dmode" >> $otpath
+else echo "$mhz.$freq USB $dmode - Daylight hours" >> $otpath
 fi
 
 #40 Meters Digital
 mhz=" 7"
 freq=`shuf -i 025-122 -n 1`
-if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode" >> $otpath
-else echo "$mhz.$freq USB $dmode" >> $otpath
+if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode - Dawn and Dusk " >> $otpath
+else echo "$mhz.$freq USB $dmode - Dawn and Dusk" >> $otpath
 fi
 
 #80 Meters Digital
 mhz=" 3"
 freq=`shuf -i 525-597 -n 1`
 if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode" >> $otpath
-else echo "$mhz.$freq USB $dmode" >> $otpath
+else echo "$mhz.$freq USB $dmode - Dark hours" >> $otpath
 fi
 echo "" >> $otpath
 echo "SSB/Voice frequencies" >> $otpath
 echo "-------------------" >> $otpath
 
-#10 meters SSB
-mhz=`shuf -i 28-29 -n 1`
-if [ $mhz -eq 28 ]
-then freq=`shuf -i 300-999 -n 1`
-else
-freq=`shuf -i 000-697 -n 1`
-fi
-echo "$mhz.$freq USB" >> $otpath
-
-
 #20 Meters SSB
 mhz="14"
 freq=`shuf -i 255-347 -n 1`
-echo "$mhz.$freq USB" >> $otpath
+echo "$mhz.$freq USB Voice - Daylight hours" >> $otpath
 
 #40 Meters SSB
 mhz=" 7"
 freq=`shuf -i 178-300 -n 1`
-echo "$mhz.$freq LSB" >> $otpath
+echo "$mhz.$freq LSB Voice - Dawn and Dusk" >> $otpath
 
 #80 Meters SSB
 mhz=" 3"
 freq=`shuf -i 803-999 -n 1`
-echo "$mhz.$freq LSB" >> $otpath
+echo "$mhz.$freq LSB Voice - Dark hours" >> $otpath
+echo " " >> $otpath
+echo "Alternate 1 = Up 40k + calendar day" >> $otpath
+echo "Alternate 2 = Down 35k + calendar  day" >> $otpath
+echo " " >> $otpath
 
 #----------------------------------------
 # Callsign generator
@@ -112,8 +122,6 @@ blockrow=1
 rowcount=9
 pagecount=1
 
-echo " " >> $otpath
-echo "-------------------" >> $otpath
 echo "-------------------" >> $otpath
 echo " " >> $otpath
 
@@ -143,16 +151,17 @@ chargen () {
 for ((i=0; i<$count; i++))
 do
 chargen
+echo "  " >> $otpath
 echo ${units[i]}" :" >> $otpath;
-echo " 0   1   2   3   4   5" >> $otpath
+echo " 0   1   2   3   4" >> $otpath
 #  printf %10s "${units[i]} :" >> $otpath;      
        echo -n $randnum1" " >> $otpath;
        echo -n $randnum2" " >> $otpath;
-       echo -n $randnum3 " ">> $otpath;
+       echo -n $randnum3" " >> $otpath;
        echo -n $randnum4" " >> $otpath;
        echo -n $randnum5" " >> $otpath;
        echo " " >>$otpath
-       echo " 6   7   8   9" >> $otpath
+       echo " 5   6   7   8   9" >> $otpath
        echo -n $randnum6" " >> $otpath;
        echo -n $randnum7" " >> $otpath;
        echo -n $randnum8" " >> $otpath;
@@ -173,7 +182,6 @@ blocksize=13
 rowcount=9
 
 echo " " >> $otpath
-echo "-------------------" >> $otpath
 echo "-------------------" >> $otpath
 echo " " >> $otpath
 
@@ -198,7 +206,6 @@ done
 echo " "
 echo "Generating Word Authentication"
 echo " " >> $otpath
-echo "-------------------" >> $otpath
 echo "-------------------" >> $otpath
 echo " " >> $otpath
 echo "Authentication Word" >> $otpath;
@@ -244,30 +251,10 @@ echo " "
 echo "Generating Dryad Authentication"
 echo " " >> $otpath
 echo "-------------------" >> $otpath
-echo "-------------------" >> $otpath
 echo " " >> $otpath
 
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
-echo "" >> $otpath
+echo "Dryad Authentication Table       " $jd >> $otpath;
 echo "" >> $otpath;
-echo "Dryad Authentication Table          " $jd >> $otpath;
-echo "" >> $otpath;
-echo "   ABC  DEF GHJ KL MN PQR ST UV WX YZ" >> $otpath;
-echo "    0    1   2  3  4   5  6  7  8  9" >> $otpath;
-echo "" >> $otpath;
-
 alph="BCDEFGHIJKLMNOPQRSTUVWXYZ"
 full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "A " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
@@ -293,10 +280,6 @@ full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "F " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
 
 echo "" >> $otpath;
-echo "   ABC  DEF GHJ KL MN PQR ST UV WX YZ" >> $otpath;
-echo "    0    1   2  3  4   5  6  7  8  9" >> $otpath;
-echo "" >> $otpath;
-
 alph="ABCDEFHIJKLMNOPQRSTUVWXYZ"
 full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "G " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
@@ -322,10 +305,6 @@ full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "L " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
 
 echo "" >> $otpath;
-echo "   ABC  DEF GHJ KL MN PQR ST UV WX YZ" >> $otpath;
-echo "    0    1   2  3  4   5  6  7  8  9" >> $otpath;
-echo "" >> $otpath;
-
 alph="ABCDEFGHIJKLNOPQRSTUVWXYZ"
 full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "M " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
@@ -351,10 +330,6 @@ full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "R " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
 
 echo "" >> $otpath;
-echo "   ABC  DEF GHJ KL MN PQR ST UV WX YZ" >> $otpath;
-echo "    0    1   2  3  4   5  6  7  8  9" >> $otpath;
-echo "" >> $otpath;
-
 alph="ABCDEFGHIJKLMNOPQRTUVWXYZ"
 full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "S " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
@@ -387,20 +362,12 @@ alph="ABCDEFGHIJKLMNOPQRSTUVWXY"
 full=`echo "$alph" | fold -w1 | shuf | tr -d '\n'`
 echo "Z " ${full:0:4} ${full:4:3} ${full:7:3} ${full:10:2} ${full:12:2} ${full:14:3} ${full:17:2} ${full:19:2} ${full:21:2} ${full:23:2} >> $otpath;
 echo "" >> $otpath
-echo "To authenticate, the person requesting authentication" >> $otpath
-echo "picks a letter in the left hand column, and then" >> $otpath
-echo "picks a random letter from the alphabet from that row." >> $otpath
-echo "The response would be the letter below the one chosen." >> $otpath
-echo "For example:" >> $otpath
-echo "Bravo One, This is Bravo Six.. Authenticate Delta Victor, Over" >> $otpath
-echo "That would be row D, and then go across to the letter V." >> $otpath
-echo "The letter immediately under V is the correct response" >> $otpath
-echo "Bravo Six, This is Bravo One...I Authenticate Kilo, Over." >> $otpath
-echo "It is important that both parties mark authenticators once" >> $otpath
-echo "they have been used, so they are not re-used." >> $otpath
+echo "To request authenticatication" >> $otpath
+echo "pick a letter in the left hand column" >> $otpath
+echo "pick another letter in that row." >> $otpath
+echo "The response is the letter below." >> $otpath
+echo "Cross off used codes." >> $otpath
 echo "" >> $otpath;
-
-echo "" >> $otpath
 
 
 #--------------------------------------------
@@ -416,7 +383,9 @@ rowcount=14
 codeline=1
 
 echo " " >> $otpath
+echo "-------------------" >> $otpath
 echo " " >> $otpath
+echo "One Time Pads" >> $otpath
 echo " " >> $otpath
 echo " "
 echo " "
@@ -447,30 +416,67 @@ do
 
         echo -n " " >> $otpath;
 
-    done 
-if [ $codeline == 1 ]; then echo -n "      Conversion Table No.1 (EN)" >> $otpath; fi
-if [ $codeline == 2 ]; then echo -n "           B-70  P-80  FIG-90" >> $otpath; fi
-if [ $codeline == 3 ]; then echo -n "      A-1  C-71  Q-81  (.)-91" >> $otpath; fi
-if [ $codeline == 4 ]; then echo -n "      E-2  D-72  R-82  (:)-92" >> $otpath; fi
-if [ $codeline == 5 ]; then echo -n "      I-3  F-73  S-83  (')-93" >> $otpath; fi
-if [ $codeline == 6 ]; then echo -n "      N-4  G-74  U-84  ( )-94" >> $otpath; fi
-if [ $codeline == 7 ]; then echo -n "      O-5  H-75  V-85  (+)-95" >> $otpath; fi
-if [ $codeline == 8 ]; then echo -n "      T-6  J-76  W-86  (-)-96" >> $otpath; fi
-if [ $codeline == 9 ]; then echo -n "           K-77  X-87  (=)-97" >> $otpath; fi
-if [ $codeline == 10 ]; then echo -n "           L-78  Y-88  REQ-98" >> $otpath; fi
-if [ $codeline == 11 ]; then echo -n "           M-79  Z-89  SPC-99" >> $otpath; fi
-if [ $codeline == 12 ]; then echo -n "           Code-0     -E   +D" >> $otpath; fi
+    done
+
+if [ $codeline == 1 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 2 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 3 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 4 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 5 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 6 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 7 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 8 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 9 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 10 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 11 ]; then echo -n "" >> $otpath; fi
+if [ $codeline == 12 ]; then echo -n "" >> $otpath; fi
       codeline=$((codeline+1))
-      echo "" >> $otpath;
+      echo "" >> $otpath
   done
 codeline=1
-  echo "" >> $otpath;
-  printf '%22s' "(e-d+t/k)" >> $otpath
   echo "" >> $otpath
-  echo "------------------------------" >> $otpath
-  echo "" >> $otpath
-done
+ 
+    done
 
-echo " "
+echo "" >> $otpath
+echo "-------------------" >> $otpath
+echo " " >> $otpath
+
+echo "Conversion Table No.1 (EN)" >> $otpath;
+echo "        B-70  P-80  FIG-90" >> $otpath;
+echo "   A-1  C-71  Q-81  (.)-91" >> $otpath;
+echo "   E-2  D-72  R-82  (:)-92" >> $otpath;
+echo "   I-3  F-73  S-83  (')-93" >> $otpath;
+echo "   N-4  G-74  U-84  ( )-94" >> $otpath;
+echo "   O-5  H-75  V-85  (+)-95" >> $otpath;
+echo "   T-6  J-76  W-86  (-)-96" >> $otpath;
+echo "        K-77  X-87  (=)-97" >> $otpath;
+echo "        L-78  Y-88  REQ-98" >> $otpath;
+echo "        M-79  Z-89  SPC-99" >> $otpath;
+echo "        Code-0     -E   +D" >> $otpath;
+echo "" >> $otpath;
+printf '%22s' "(e-d+t/k)" >> $otpath
+echo "" >> $otpath;
+echo "Encrypt subtract/Decrypt add" >> $otpath;
+echo "Text over Key" >> $otpath;
+echo "" >> $otpath
+echo "------------------------------" >> $otpath
+echo "" >> $otpath
+echo "Math Table" >> $otpath
+echo "Subtract Vertical" >> $otpath
+echo "Add Horizontal" >> $otpath
+echo "0|0|1|2|3|4|5|6|7|8|9|" >> $otpath
+echo "0|0|1|2|3|4|5|6|7|8|9|" >> $otpath
+echo "1|9|0|1|2|3|4|5|6|7|8|" >> $otpath
+echo "2|8|9|0|1|2|3|4|5|6|7|" >> $otpath
+echo "3|7|8|9|0|1|2|3|4|5|6|" >> $otpath
+echo "4|6|7|8|9|0|1|2|3|4|5|" >> $otpath
+echo "5|5|6|7|8|9|0|1|2|3|4|" >> $otpath
+echo "6|4|5|6|7|8|9|0|1|2|3|" >> $otpath
+echo "7|3|4|5|6|7|8|9|0|1|2|" >> $otpath
+echo "8|2|3|4|5|6|7|8|9|0|1|" >> $otpath
+echo "9|1|2|3|4|5|6|7|8|9|0|" >> $otpath
+echo "-------------------" >> $otpath
+echo " " >> $otpath
 echo " "
 echo "CEOI file generated -->  " $otpath
