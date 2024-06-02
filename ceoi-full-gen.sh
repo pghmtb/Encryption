@@ -45,130 +45,107 @@ echo " " >> $otpath
 echo "-------------------" >> $otpath
 echo " " >> $otpath
 
+#--------------------------------------
+#2m Simplex for close range
+#--------------------------------------
+echo "2m Simplex frequencies" >> $otpath
+echo " " >> $otpath
+# Function to generate a random frequency within a specific range
+generate_random_frequency_in_range() {
+    local start_frequency=$1
+    local end_frequency=$2
+
+    # Generate a random frequency within the range
+    random_frequency=$(awk -v min="$start_frequency" -v max="$end_frequency" \
+        'BEGIN{srand(); printf "%.2f\n", min+rand()*(max-min)}')
+
+    # Return the random frequency
+    echo "$random_frequency"
+}
+
+# Function to randomly select three non-duplicate frequencies
+select_three_non_duplicate_frequencies() {
+    local range1_start=$1
+    local range1_end=$2
+    local range2_start=$3
+    local range2_end=$4
+    local frequency1 frequency2 frequency3
+
+    # Generate the first random frequency within the first range
+    frequency1=$(generate_random_frequency_in_range $range1_start $range1_end)
+
+    # Generate the second random frequency within the second range, ensuring it's different from the first
+    while :; do
+        frequency2=$(generate_random_frequency_in_range $range2_start $range2_end)
+        if [ "$frequency2" != "$frequency1" ]; then
+            break
+        fi
+    done
+
+    # Generate the third random frequency within the second range, ensuring it's different from the first two
+    while :; do
+        frequency3=$(generate_random_frequency_in_range $range2_start $range2_end)
+        if [ "$frequency3" != "$frequency1" ] && [ "$frequency3" != "$frequency2" ]; then
+            break
+        fi
+    done
+
+    # Output the selected frequencies
+    echo "Primary: $frequency1 MHz" >> $otpath
+    echo "Alternate: $frequency2 MHz" >> $otpath
+}
+
+# Define the frequency ranges
+range1_start=146.40
+range1_end=146.58
+range2_start=147.42
+range2_end=147.57
+
+# Select three non-duplicate frequencies within the defined ranges
+select_three_non_duplicate_frequencies $range1_start $range1_end $range2_start $range2_end
+
+echo " " >> $otpath
+echo "-------------------" >> $otpath
+echo " " >> $otpath
+
+
+
 #---------------------------------------
-#Time code
+#Communications Windows
 #---------------------------------------
 echo "Generating Communicaations Windows"
-# Function to generate a random 10-minute window within a specific range in UTC format
-generate_random_window_in_range() {
-    local start_hour=$1
-    local start_minute=$2
-    local end_hour=$3
-    local end_minute=$4
+echo "Communications Windows" >> $otpath
+echo " " >> $otpath
+#!/bin/bash
 
-    # Calculate the total minutes from the start of the day for the start and end times
-    start_total_minutes=$((start_hour * 60 + start_minute))
-    end_total_minutes=$((end_hour * 60 + end_minute))
+# Function to generate a random frequency within a given range
+generate_frequency() {
+    lower=$1
+    upper=$2
+    printf "%.3f\n" $(echo "scale=3; $lower + ($upper - $lower) * $RANDOM / 32767" | bc)
+}
+echo " " >> $otpath
+# Function to generate a communication plan for a specific time range
+generate_plan() {
+    start_time=$1
+    end_time=$2
+    lower_freq=$3
+    upper_freq=$4
 
-    if [ $end_total_minutes -gt $start_total_minutes ]; then
-        # If the end time is later in the same day
-        total_minutes_range=$((end_total_minutes - start_total_minutes))
-    else
-        # If the end time is on the next day
-        total_minutes_range=$((end_total_minutes + 1440 - start_total_minutes))
-    fi
-
-    # Adjust range to account for 10-minute window
-    total_minutes_range=$((total_minutes_range - 10))
-
-    # Pick a random minute offset within the adjusted range
-    random_offset=$((RANDOM % total_minutes_range))
-    total_minutes=$((start_total_minutes + random_offset))
-
-    # Calculate the start and end times of the 10-minute window
-    start_hour=$((total_minutes / 60 % 24))
-    start_minute=$((total_minutes % 60))
-    end_hour=$(((total_minutes + 10) / 60 % 24))
-    end_minute=$(((total_minutes + 10) % 60))
-
-    # Format and return the window in UTC format
-    start_time=$(printf "%02d:%02dZ" $start_hour $start_minute)
-    end_time=$(printf "%02d:%02dZ" $end_hour $end_minute)
-    echo "$start_time - $end_time"
+    for ((i=1; i<=1; i++)); do
+        freq=$(generate_frequency $lower_freq $upper_freq)
+        echo $start_time "  Frequency: $freq MHz" >> $otpath
+    done
 }
 
-# Generate a random 10-minute window in the first range (10:30-13:30 UTC)
-random_window1=$(generate_random_window_in_range 10 30 13 30)
+# Generate communication plans for each time range
+generate_plan "0300z-0900z" "3.803-3.997" 3.803 3.997
+generate_plan "0900z-1400z" "7.178-7.297" 7.178 7.297
+generate_plan "1400z-2300z" "14.228-14.347" 14.228 14.347
+generate_plan "2300z-0300z" "7.178-7.297" 7.178 7.297
 
-# Generate a random 10-minute window in the second range (21:30-01:30 UTC)
-random_window2=$(generate_random_window_in_range 21 30 1 30)
-
-# Output the results
-echo "Communication windows" >> $otpath
-echo "$random_window1" >> $otpath
-echo "$random_window2" >> $otpath
-echo " " >> $otpath
-echo "-------------------" >> $otpath
 echo " " >> $otpath
 
-
-#----------------------------------------
-# Frequency generator
-#----------------------------------------
-
-echo "Generating Frequencies"
-
-echo "Frequencies      " >> $otpath
-echo "If frequency is in use move up" >> $otpath
-echo "in 5kHz steps" >> $otpath
-#2 Meters
-check2m () {
-mhz=`shuf -i 146-147 -n 1`
-freq=`shuf -i 420-570 -n 1`
-}
-
-check2m
-while [ $freq -lt 567 -a $freq -gt 505 ] 
-do check2m
-done
-echo "$mhz.$freq FM" >> $otpath
-
-echo "" >> $otpath
-echo "Alternate Digital frequencies" >> $otpath
-echo "-------------------" >> $otpath
-
-#20 Meters Digital
-mhz="14"
-freq=`shuf -i 025-147 -n 1`
-if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode - Daylight hours" >> $otpath
-else echo "$mhz.$freq USB $dmode - Daylight hours" >> $otpath
-fi
-
-#40 Meters Digital
-mhz=" 7"
-freq=`shuf -i 025-122 -n 1`
-if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode - Dawn and Dusk " >> $otpath
-else echo "$mhz.$freq USB $dmode - Dawn and Dusk" >> $otpath
-fi
-
-#80 Meters Digital
-mhz=" 3"
-freq=`shuf -i 525-597 -n 1`
-if [ $freq -le 99 ]; then echo "$mhz.0$freq USB $dmode" >> $otpath
-else echo "$mhz.$freq USB $dmode - Dark hours" >> $otpath
-fi
-echo "" >> $otpath
-echo "SSB/Voice frequencies" >> $otpath
-echo "-------------------" >> $otpath
-
-#20 Meters SSB
-mhz="14"
-freq=`shuf -i 255-347 -n 1`
-echo "$mhz.$freq USB Voice - Daylight hours" >> $otpath
-
-#40 Meters SSB
-mhz=" 7"
-freq=`shuf -i 178-300 -n 1`
-echo "$mhz.$freq LSB Voice - Dawn and Dusk" >> $otpath
-
-#80 Meters SSB
-mhz=" 3"
-freq=`shuf -i 803-999 -n 1`
-echo "$mhz.$freq LSB Voice - Dark hours" >> $otpath
-echo " " >> $otpath
-echo "Alternate 1 = Up 40k + calendar day" >> $otpath
-echo "Alternate 2 = Down 35k + calendar  day" >> $otpath
-echo " " >> $otpath
 
 #----------------------------------------
 # Callsign generator
