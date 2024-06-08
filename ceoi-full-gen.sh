@@ -25,13 +25,13 @@ echo " " >> $otpath
 #Emmissions Control"
 #---------------------------
 
-echo "Emissions Contol (EmCon)" >> $otpath
+echo "Emissions Control (EmCon)" >> $otpath
 echo " " >> $otpath
 echo "EMCON 1: Radio Routine." >> $otpath
 echo "No perceived threat." >> $otpath
 echo " " >> $otpath
 echo "EMCON 2: Radio Essential." >> $otpath
-echo "Misson-critical/Emergency.  Heightened threat level." >> $otpath
+echo "Mission-critical/Emergency.  Heightened threat level." >> $otpath
 echo "Increased surveillance or potential hostilities." >> $otpath
 echo " " >> $otpath
 echo "EMCON 3: Radio Silence." >> $otpath
@@ -114,38 +114,93 @@ echo " " >> $otpath
 #Communications Windows
 #---------------------------------------
 echo "Generating Communicaations Windows"
-echo "Communications Windows" >> $otpath
+echo "15 minute Communications Windows and Frequencies" >> $otpath
 echo " " >> $otpath
-#!/bin/bash
 
-# Function to generate a random frequency within a given range
-generate_frequency() {
-    lower=$1
-    upper=$2
-    printf "%.3f\n" $(echo "scale=3; $lower + ($upper - $lower) * $RANDOM / 32767" | bc)
+# Function to generate a random time within a specific range in UTC format
+generate_random_time_in_range() {
+    local start_hour=$1
+    local start_minute=$2
+    local end_hour=$3
+    local end_minute=$4
+
+    # Calculate the total minutes from the start of the day for the start and end times
+    start_total_minutes=$((start_hour * 60 + start_minute))
+    end_total_minutes=$((end_hour * 60 + end_minute))
+
+    if [ $end_total_minutes -gt $start_total_minutes ]; then
+        # If the end time is later in the same day
+        total_minutes_range=$((end_total_minutes - start_total_minutes))
+    else
+        # If the end time is on the next day
+        total_minutes_range=$((end_total_minutes + 1440 - start_total_minutes))
+    fi
+
+    # Pick a random minute offset within the range
+    random_offset=$((RANDOM % total_minutes_range))
+    total_minutes=$((start_total_minutes + random_offset))
+
+    # Calculate the resulting hour and minute
+    hour=$((total_minutes / 60 % 24))
+    minute=$((total_minutes % 60))
+    second=0
+
+    # Format and return the time in UTC format
+    printf "%02d:%02d:%02dZ\n" $hour $minute $second
 }
-echo " " >> $otpath
-# Function to generate a communication plan for a specific time range
-generate_plan() {
-    start_time=$1
-    end_time=$2
-    lower_freq=$3
-    upper_freq=$4
 
-    for ((i=1; i<=1; i++)); do
-        freq=$(generate_frequency $lower_freq $upper_freq)
-        echo $start_time "  Frequency: $freq MHz" >> $otpath
-    done
+# Function to generate a random frequency within a specific range
+generate_random_frequency_in_range() {
+    local start_frequency=$1
+    local end_frequency=$2
+
+    # Generate a random frequency within the range
+    random_frequency=$(awk -v min="$start_frequency" -v max="$end_frequency" \
+        'BEGIN{srand(); printf "%.3f\n", min+rand()*(max-min)}')
+
+    # Return the random frequency
+    echo "$random_frequency MHz"
 }
 
-# Generate communication plans for each time range
-generate_plan "0300z-0900z" "3.803-3.997" 3.803 3.997
-generate_plan "0900z-1400z" "7.178-7.297" 7.178 7.297
-generate_plan "1400z-2300z" "14.228-14.347" 14.228 14.347
-generate_plan "2300z-0300z" "7.178-7.297" 7.178 7.297
+# Function to generate communication windows for voice and digital
+generate_communication_windows() {
+    local voice_start_hour=$1
+    local voice_end_hour=$2
+    local voice_start_frequency=$3
+    local voice_end_frequency=$4
+    local digital_start_frequency=$5
+    local digital_end_frequency=$6
+
+    # Generate a random 15-minute window for voice communication
+    voice_start_time=$(generate_random_time_in_range $voice_start_hour 0 $voice_end_hour 45)
+    voice_end_time=$(date -u -d"$voice_start_time +15 minutes" +%H:%M:%SZ)
+    voice_frequency=$(generate_random_frequency_in_range $voice_start_frequency $voice_end_frequency)
+
+    # Generate a random 15-minute window for digital communication starting right after the voice window
+    digital_start_time=$(date -u -d"$voice_end_time +1 minute" +%H:%M:%SZ)
+    digital_end_time=$(date -u -d"$digital_start_time +15 minutes" +%H:%M:%SZ)
+    digital_frequency=$(generate_random_frequency_in_range $digital_start_frequency $digital_end_frequency)
+
+    # Output the communication windows
+    echo "Voice Window: $voice_start_time - $voice_end_time" >> $otpath
+    echo "Frequency: $voice_frequency" >> $otpath
+    echo "--" >> $otpath
+    echo "Digital Window: $digital_start_time - $digital_end_time" >> $otpath
+    echo "Frequency: $digital_frequency" >> $otpath
+}
+
+# Generate communication windows for the provided time ranges and frequency ranges
+echo "Generating Communication Windows for 15:00z-22:00z"
+generate_communication_windows 15 22 14.150 14.350 14.000 14.150
+echo >> $otpath
+echo "Generating Communication Windows for 11:00z-23:00z"
+generate_communication_windows 11 23 7.125 7.300 7.000 7.125
+echo >> $otpath
+echo "Generating Communication Windows for 00:00z-10:00z"
+generate_communication_windows 0 10 3.600 4.000 3.500 3.600
+
 
 echo " " >> $otpath
-
 
 #----------------------------------------
 # Callsign generator
@@ -230,9 +285,17 @@ echo "ex: 2 covers 2, 12, 22" >> $otpath
 
 for ((i=0; i<=$rowcount; i++))
   do
-        randnum1=`base64 /dev/random | tr -dc A-Z0-9 | head -c $blocksize`
+# Define the characters to be used in the password
+CHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/~"
 
-echo $i "   "  $randnum1 >> $otpath;
+# Generate a random 12-character password
+PASSWORD=""
+for x in {1..12}; do
+    PASSWORD="$PASSWORD${CHARACTERS:RANDOM % ${#CHARACTERS}:1}"
+
+done
+echo $i "   " $PASSWORD >> $otpath
+
 done
 
 #----------------------------------------
