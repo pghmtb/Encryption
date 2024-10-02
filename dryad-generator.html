@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dyad Chart Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Dyad Chart Generator</h1>
+    <p>Generate a grid-based dyad chart for authentication.</p>
+
+    <label for="gridSize">Grid Size (e.g., 5x5):</label>
+    <input type="number" id="gridSize" value="5" min="2" max="10">
+    <br><br>
+
+    <button onclick="generateDyadChart()">Generate Dyad Chart</button>
+
+    <div id="dyadChart"></div>
+</div>
+
+<script>
+    function generateDyadChart() {
+        const gridSize = document.getElementById('gridSize').value;
+        const dyadChartContainer = document.getElementById('dyadChart');
+        dyadChartContainer.innerHTML = '';
+
+        // Create table element
+        const table = document.createElement('table');
+        
+        // Generate the header row
+        const headerRow = document.createElement('tr');
+        headerRow.appendChild(document.createElement('th')); // Empty corner cell
+        for (let col = 1; col <= gridSize; col++) {
+            const th = document.createElement('th');
+            th.textContent = String.fromCharCode(64 + col); // A, B, C, ...
+            headerRow.appendChild(th);
+        }
+        table.appendChild(headerRow);
+
+        // Generate the rows of the grid
+        for (let row = 1; row <= gridSize; row++) {
+            const tr = document.createElement('tr');
+            const rowHeader = document.createElement('th');
+            rowHeader.textContent = row; // 1, 2, 3, ...
+            tr.appendChild(rowHeader);
+
+            for (let col = 1; col <= gridSize; col++) {
+                const td = document.createElement('td');
+                td.textContent = generateRandomCharacter(); // Fill with random alphanumeric
+                tr.appendChild(td);
+            }
+
+            table.appendChild(tr);
+        }
+
+        // Append the table to the container
+        dyadChartContainer.appendChild(table);
+    }
+
+    function generateRandomCharacter() {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        return characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+</script>
+
+</body>
+</html>

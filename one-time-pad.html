@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One-Time Pad Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        input[type="number"] {
+            width: 100px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+        }
+        .pad-separator {
+            margin: 20px 0;
+            border-bottom: 2px dashed #000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>One-Time Pad Generator</h1>
+    <p>Enter the number of pads to generate:</p>
+
+    <label for="numPads">Number of Pads:</label>
+    <input type="number" id="numPads" min="1" value="1">
+    <br><br>
+
+    <button onclick="generatePads()">Generate Pads</button>
+
+    <div class="output" id="output"></div>
+</div>
+
+<script>
+    function generatePads() {
+        const numPads = document.getElementById('numPads').value;
+        const padLength = 100; // Fixed pad length of 100 characters
+        const groupSize = 5;   // Group characters in sets of 5
+        const groupsPerLine = 5; // 5 groups per line
+        const linesPerPad = padLength / (groupSize * groupsPerLine);
+
+        let output = '';
+
+        for (let i = 0; i < numPads; i++) {
+            let pad = '';
+            
+            for (let line = 0; line < linesPerPad; line++) {
+                let lineContent = '';
+
+                for (let group = 0; group < groupsPerLine; group++) {
+                    let groupContent = '';
+                    
+                    for (let char = 0; char < groupSize; char++) {
+                        groupContent += Math.floor(Math.random() * 10); // Generate random digits (0-9)
+                    }
+
+                    lineContent += groupContent + ' ';
+                }
+
+                pad += lineContent.trim() + '\n'; // Trim and add a newline
+            }
+
+            output += pad.trim(); // Add the full pad to output
+            
+            if (i < numPads - 1) {
+                output += '\n\n' + '-'.repeat(30) + '\n\n'; // Add separator between pads
+            }
+        }
+
+        document.getElementById('output').textContent = output;
+    }
+</script>
+
+
+</div></body>
+</html>
