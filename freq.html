@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Ham Radio Frequency Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        button { margin: 20px 0; padding: 10px 20px; }
+        #frequencyDisplay { font-size: 1.5em; }
+    </style>
+</head>
+<body>
+    <h1>Random Ham Radio Frequency Generator</h1>
+    <button onclick="generateFrequencies()">Generate Frequencies</button>
+    <div id="frequencyDisplay"></div>
+
+    <script>
+    function generateFrequencies() {
+        // Common ham radio bands for voice communication in MHz
+        const bands = {
+            "160m": [1.840, 2.000],
+            "80m": [3.600, 4.000],
+            "40m": [7.125, 7.300],
+            "20m": [14.150, 14.350],
+            "15m": [21.200, 21.450],
+            "10m": [28.300, 29.700],
+            "6m": [50.100, 54.000]
+        };
+
+        let displayText = '';
+        for (let band in bands) {
+            // Generate a random frequency within the band's voice portion
+            let min = bands[band][0];
+            let max = bands[band][1];
+            let randomFrequency = (Math.random() * (max - min) + min).toFixed(3);
+            displayText += `<p>${band}: ${randomFrequency} MHz</p>`;
+        }
+        
+        document.getElementById('frequencyDisplay').innerHTML = displayText;
+    }
+    </script>
+</body>
+</html>
